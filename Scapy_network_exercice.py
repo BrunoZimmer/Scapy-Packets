@@ -142,7 +142,6 @@ def read_pcap(csv_file, pcap_file):
 
                 if (#Condition to the test 3
                     #verify all the packet's content
-                    int(packet.id) != int(row[0]) or
                     str(packet[IP].src) != str(row[1]) or
                     str(packet[IP].dst) != str(row[2]) or
                     int(packet.proto) != int(row[3]) or
@@ -184,6 +183,7 @@ def read_pcap(csv_file, pcap_file):
 
 
 
+############# OTHER POSITIVE OR NEGATIVE TEST CASES ##################
 
 #Try to think of other positive or negative test cases that could 
 # extend the test coverage (implementation is not required)
@@ -196,27 +196,19 @@ def read_pcap(csv_file, pcap_file):
 
 
 
-
-
-
-
-
-
-
-
-############  single test functions 
+############  single test functions ############
 
 # def test_packets_quantity( csv_file, pcap_file):
 #     packets = rdpcap(pcap_file)
 #     quantity = len(packets)
-#     print(quantity)
+#     # print(quantity)
 
 #     with open(csv_file, "r") as file:
 #         csvreader = csv.reader(file)  # reads all
 #         header = next(csvreader)  # saves the header
 #         for row in csvreader:  # saves each row
 #             quantity -= 1
-#             print(quantity)
+#             # print(quantity)
 
 #     return True if quantity == 0 else False
     
@@ -254,3 +246,22 @@ def read_pcap(csv_file, pcap_file):
 #                 return False
 
 #     return True
+
+# print(test_packets_quantity( csv_file, pcap_file))
+# print(test_right_order( csv_file, pcap_file))
+# print(test_right_content( csv_file, pcap_file))
+# print("\n")
+
+# print(test_packets_quantity( csv_file, pcap_badfile))
+# print(test_right_order( csv_file, pcap_badfile))
+# print(test_right_content( csv_file, pcap_badfile))
+# print("\n")
+
+# print(test_packets_quantity( csv_badfile, pcap_file))
+# print(test_right_order( csv_badfile, pcap_file))
+# print(test_right_content( csv_badfile, pcap_file))
+# print("\n")
+
+# print(test_packets_quantity( "strin2.csv", pcap_file))
+# print(test_right_order( "strin2.csv", pcap_file))
+# print(test_right_content( "strin2.csv", pcap_file))
