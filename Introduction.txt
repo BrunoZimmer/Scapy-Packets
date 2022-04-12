@@ -1,0 +1,47 @@
+Although dealing with networks, our software does not see in most cases the actual packets, but only metadata, 
+such as source and destination IP addresses, UDP or TCP ports, packet-size, etc. To view the packets or to replay
+ them, a possibility is to craft the packets using a library like Scapy (see https://scapy.readthedocs.io/en/latest/).
+  That way, we can store the generated packets in a pcap file. Such file can be opened with a network protocol 
+  analysis tools (Wireshark is a very popular one, with a GUI, and tshark is its terminal-based variant). Note 
+  that usually such metadata only contains information about the IP header and above. But packets transmitted 
+  in IP networks typically contain an ethernet header below the IP header.
+
+Given a CSV file that contains metadata of real IP packets:
+     ---- write a function `build_pcap` that generates packets based on that data
+    saves it into a pcap file
+    returns the number of packets it generated.
+
+Write a test that checks the generated pcap file, by reading the pcap file and do a few checks, such as:
+    does it contain the expected number of packets ?
+    are the packets in the right order ?
+    do their properties match the content of the CSV ?
+
+Try to think of other positive or negative test cases that could extend the test coverage 
+(implementation is not required)
+
+
+For this exercise, we'll make the following assumptions:
+    a generated packet must contain a source and a destination IP address, a transport protocol header (TCP or UDP) with
+        source and destination ports, based on the content of the metadata,
+    the size of the packet should match what is specified in the metadata, and for that, one can append dummy bytes at 
+        the end of the packet,
+    no importance will be given to the time information of each packet in the pcap file, but the packet flow ordering 
+        from the CSV file must be kept,
+    both IPv4 and IPv6 versions should be handled,
+    use fixed values for ethernet source and destination addresses, such as "00:00:00:00:00:01", "00:00:00:00:00:02".
+    there is no constraint on how the code is structured or divided, except for the build_pcap function.
+
+Here is an example of CSV string:
+"""id,src-ip,dst-ip,proto,sport,dport,length
+1,10.0.0.1,20.0.0.2,6,20500,53,120"""
+
+And the resulting scapy structure:
+<Ether  dst=00:00:00:00:00:02 src=00:00:00:00:00:01 type=IPv4 |<IP  frag=0 proto=tcp src=10.0.0.1 dst=20.0.0.2 |
+<TCP  sport=20500 dport=domain |<Raw  load='AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA' |>>>>
+
+# csv_file: path to the input csv file
+# pcap_file: path to where the resulting pcap file should be stored
+# returns: the number of packets that were put in the pcap file
+def build_pcap(csv_file, pcap_file):
+    # write code here
+    return nb_packets

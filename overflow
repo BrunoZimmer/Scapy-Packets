@@ -1,0 +1,72 @@
+import csv
+
+from scapy.all import IP, UDP, Ether
+from scapy.utils import wrpcap
+
+# csv_file: path to the input csv file
+# pcap_file: path to where the resulting pcap file should be stored
+# returns: the number of packets that were put in the pcap file
+csv_file = "string.csv"
+pcap_file = "string.pcap"
+
+
+def ReadCSV(csv_file):  # returns the list with all rows of the csv file
+    # its better to have this function into build-pcap to reduce the memory usage
+    rows = []
+
+    with open(csv_file, "r") as file:
+        csvreader = csv.reader(file)  # reads all
+        header = next(csvreader)  # saves the header
+        for row in csvreader:  # saves each row
+            rows.append(row)
+
+    return [header, rows]
+
+
+def build_pcap(csv_file, pcap_file):
+    rows = ReadCSV(csv_file)
+
+    packets = []
+    nb_packets = 0
+    for row in rows[1]:  # header      ids
+        print(row)
+        id = int(row[0])
+        srcmac = "00:00:00:00:00:01"
+        dstmac = "00:00:00:00:00:02"
+        srcip = str(row[1])
+        dstip = str(row[2])
+        ptcl = "tcp"
+        srcport = int(row[4])
+        dstport = int(row[5])
+        length = int(row[6])
+        nb_packets += 1
+        ################################################################################
+
+        pkt = (
+            Ether(dst=dstmac, src=srcmac)
+            / IP(src=srcip, dst=dstip, len=length, id=id, proto=ptcl)
+            / UDP(sport=srcport, dport=dstport)
+        )
+        packets.append(pkt)
+
+    print(packets)
+    wrpcap(pcap_file, packets)
+
+    return nb_packets
+
+
+# Here is an example of CSV string:
+# """id,src-ip,dst-ip,proto,sport,dport,length
+# 1,10.0.0.1,20.0.0.2,6,20500,53,120"""
+
+# And the resulting scapy structure:
+# <Ether  dst=00:00:00:00:00:02 src=00:00:00:00:00:01 type=IPv4 |<IP  frag=0 proto=tcp src=10.0.0.1 dst=20.0.0.2 |
+# <TCP  sport=20500 dport=domain |<Raw  load='AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA' |>>>>
+
+
+def read_pcap(pcap_file):
+    packet = rdpcap(pcap_file)
+    for p in packet:
+        print (p.show)
+read_pcap(pcap_file)
+build_pcap(csv_file, pcap_file)
